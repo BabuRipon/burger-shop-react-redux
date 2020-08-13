@@ -7,32 +7,19 @@ import Aux from '../../hoc/aux/aux';
 import axios from '../../axios-order';
 import Spinner from '../../Ui/spinner/spinner';
 import withError from '../../Ui/withErrorHandler/withErrorHandler';
-import * as actionTypes from '../../store/actionType';
+import * as actionCreator from '../../store/action/index'
 import {connect}from 'react-redux'
 
 
-const ingredient_price={
-    salad:0.5,
-    cheese:0.4,
-    bacon:0.6,
-    meat:1.3
-}
-
 class BurgerBuilder extends Component{
-
-    // constructor(props){
-    //     super(props)
-    //     this.state={
-
-    //     }
-    // }
 
     state={
         purchasing:false,
-        loading:false,
-        error:null
     }
 
+componentDidMount(){
+  this.props.onIngredientsInit();
+}
 
  updatePurchasable(ingredient){
      const sum=Object.keys(ingredient).map(igkey=>{
@@ -54,21 +41,8 @@ class BurgerBuilder extends Component{
  }
 
  purchaseContinueHandler=()=>{
-    //  alert('You Continue');
 
-    const queryParams=[];
-    for(let i in this.state.ingredients){
-        queryParams.push(encodeURIComponent(i)+'='+encodeURIComponent(this.state.ingredients[i]))
-    }
-
-    queryParams.push('price='+this.state.totalPrice);
-
-    const queryString=queryParams.join('&');
-
-    this.props.history.push({
-        pathname:'/checkout',
-        search:'?'+queryString
-    });
+    this.props.history.push('/checkout');
  }
 
     render(){
@@ -83,7 +57,7 @@ class BurgerBuilder extends Component{
 
          let orderSummary=null;
 
-        let burger=this.state.error?<p>{this.state.error}</p>:<Spinner />;
+        let burger=this.props.error?<p>cound not fetch ingredients</p>:<Spinner />;
 
 
          if(this.props.ing){
@@ -110,9 +84,9 @@ class BurgerBuilder extends Component{
          }
 
 
-         if(this.state.loading){
-            orderSummary=<Spinner />
-        }
+        //  if(this.state.loading){
+        //     orderSummary=<Spinner />
+        // }
 
 
         return(
@@ -130,14 +104,16 @@ class BurgerBuilder extends Component{
 const mapStateToProps=(state)=>{
     return {
         ing:state.ingredients,
-        price:state.totalPrice
+        price:state.totalPrice,
+        error:state.error
     }
 }
 
 const mapDispatchToProps=(dispatch)=>{
     return{
-        onAddIngredient:(name)=>dispatch({type:actionTypes.ADD_INGREDIENT,ingName:name}),
-        onRemoveIngredient:(name)=>dispatch({type:actionTypes.REMOVE_INGREDIENT,ingName:name})
+        onAddIngredient:(name)=>dispatch(actionCreator.addIngredient(name)),
+        onRemoveIngredient:(name)=>dispatch(actionCreator.removeIngredient(name)),
+        onIngredientsInit:()=>dispatch(actionCreator.initialIngredients())
     }
 }
 

@@ -1,13 +1,10 @@
-import * as actionTypes from './actionType';
+import * as actionTypes from '../action/actionType';
+import { act } from 'react-dom/test-utils';
 
 const initialState={
-    ingredients:{
-        salad:0,
-        meat:0,
-        cheese:0,
-        bacon:0
-    },
+    ingredients:null,
     totalPrice:4,
+    error:false,
 }
 
 const ingredient_price={
@@ -36,6 +33,17 @@ const reducer=(state=initialState,action)=>{
                     [action.ingName]:state.ingredients[action.ingName]-1
                 },
                 totalPrice:state.totalPrice-ingredient_price[action.ingName]
+            }
+        case actionTypes.SET_INGREDIENTS:
+            return{
+                ...state,
+                ingredients:action.ingredients,
+                error:false,
+            }
+        case actionTypes.FETCH_INGREDIENT_FAILED:
+            return{
+                ...state,
+                error:true
             }
 
      }
