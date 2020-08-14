@@ -30,6 +30,23 @@ export const fetchIngredientFailed=()=>{
     }
 }
 
+export const priceInit=(value)=>{
+    return {
+        type:actionType.PRICE_INIT,
+        price:value
+    }
+}
+
+export const initialPrice=()=>{
+    return dispatch=>{
+        axios.get('/totalPrice.json')
+          .then(res=>{
+              dispatch(priceInit(res.data))
+          })
+
+    }
+}
+
 export const initialIngredients=()=>{
     return dispatch=>{
        axios.get('/%20ingredients.json')

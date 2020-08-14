@@ -1,5 +1,4 @@
 import * as actionTypes from '../action/actionType';
-import { act } from 'react-dom/test-utils';
 
 const initialState={
     ingredients:null,
@@ -16,6 +15,11 @@ const ingredient_price={
 
 const reducer=(state=initialState,action)=>{
      switch(action.type){
+         case actionTypes.PRICE_INIT:
+             return{
+                 ...state,
+                 totalPrice:action.price
+             }
          case actionTypes.ADD_INGREDIENT:
              return {
                 ...state,
@@ -37,7 +41,12 @@ const reducer=(state=initialState,action)=>{
         case actionTypes.SET_INGREDIENTS:
             return{
                 ...state,
-                ingredients:action.ingredients,
+                ingredients:{
+                    salad:action.ingredients.salad,
+                    cheese:action.ingredients.cheese,
+                    bacon:action.ingredients.bacon,
+                    meat:action.ingredients.meat
+                },
                 error:false,
             }
         case actionTypes.FETCH_INGREDIENT_FAILED:

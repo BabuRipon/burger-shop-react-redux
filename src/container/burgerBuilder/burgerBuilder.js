@@ -41,7 +41,7 @@ componentDidMount(){
  }
 
  purchaseContinueHandler=()=>{
-
+    this.props.onPurchaseInit();
     this.props.history.push('/checkout');
  }
 
@@ -103,9 +103,9 @@ componentDidMount(){
 
 const mapStateToProps=(state)=>{
     return {
-        ing:state.ingredients,
-        price:state.totalPrice,
-        error:state.error
+        ing:state.burgerBuilder.ingredients,
+        price:state.burgerBuilder.totalPrice,
+        error:state.burgerBuilder.error
     }
 }
 
@@ -113,7 +113,8 @@ const mapDispatchToProps=(dispatch)=>{
     return{
         onAddIngredient:(name)=>dispatch(actionCreator.addIngredient(name)),
         onRemoveIngredient:(name)=>dispatch(actionCreator.removeIngredient(name)),
-        onIngredientsInit:()=>dispatch(actionCreator.initialIngredients())
+        onIngredientsInit:()=>dispatch(actionCreator.initialIngredients()),
+        onPurchaseInit:()=>dispatch(actionCreator.purchaseInit())
     }
 }
 
