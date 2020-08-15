@@ -34,7 +34,14 @@ componentDidMount(){
  }
 
  purchaseHandler=()=>{
-     this.setState({purchasing:true})
+     if(this.props.isAuthenticate){
+        this.setState({purchasing:true})
+     }
+     else{
+        this.props.onAuthRedirectPath('/checkout')
+        this.props.history.push('/auth')
+     }
+     
  }
 
  closeBackdropHandler=()=>{
@@ -72,6 +79,7 @@ componentDidMount(){
                  <Aux>
                     <Burger ingredients={this.props.ing}/>
                     <BuildControls 
+                    isAuth={this.props.isAuthenticate}
                     ingredientAdded={this.props.onAddIngredient}
                     ingredientRemove={this.props.onRemoveIngredient}
                     disabled={disableInfo}
@@ -106,7 +114,8 @@ const mapStateToProps=(state)=>{
     return {
         ing:state.burgerBuilder.ingredients,
         price:state.burgerBuilder.totalPrice,
-        error:state.burgerBuilder.error
+        error:state.burgerBuilder.error,
+        isAuthenticate:state.auth.token!==null,
     }
 }
 
@@ -116,7 +125,8 @@ const mapDispatchToProps=(dispatch)=>{
         onRemoveIngredient:(name)=>dispatch(actionCreator.removeIngredient(name)),
         onIngredientsInit:()=>dispatch(actionCreator.initialIngredients()),
         onPurchaseInit:()=>dispatch(actionCreator.purchaseInit()),
-        onInittialPrice:()=>dispatch(actionCreator.initialPrice())
+        onInittialPrice:()=>dispatch(actionCreator.initialPrice()),
+        onAuthRedirectPath:(path)=>dispatch(actionCreator.authRedirectToPath(path))
     }
 }
 
