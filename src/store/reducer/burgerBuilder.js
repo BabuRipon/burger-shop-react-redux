@@ -1,4 +1,5 @@
 import * as actionTypes from '../action/actionType';
+import { updateObject } from '../utility';
 
 const initialState={
     ingredients:null,
@@ -13,50 +14,45 @@ const ingredient_price={
     meat:1.3
 }
 
+const addIngredient=(state,action)=>{
+    const updateIngredients=updateObject(state.ingredients,
+        { [action.ingName]:state.ingredients[action.ingName]+1})
+     return updateObject(state,{ingredients:updateIngredients,
+        totalPrice:state.totalPrice+ingredient_price[action.ingName]})
+}
+
+const removeIngredients=(state,action)=>{
+    const updateIng=updateObject(state.ingredients,
+        { [action.ingName]:state.ingredients[action.ingName]-1})
+     return updateObject(state,{ingredients:updateIng,
+        totalPrice:state.totalPrice+ingredient_price[action.ingName]})
+}
+
+const setIngredients=(state,action)=>{
+    return updateObject(state,
+        { 
+            ingredients:{
+            salad:action.ingredients.salad,
+            cheese:action.ingredients.cheese,
+            bacon:action.ingredients.bacon,
+            meat:action.ingredients.meat
+                },
+            error:false
+        }
+        )
+}
+
 const reducer=(state=initialState,action)=>{
      switch(action.type){
-         case actionTypes.PRICE_INIT:
-             return{
-                 ...state,
-                 totalPrice:action.price
-             }
-         case actionTypes.ADD_INGREDIENT:
-             return {
-                ...state,
-                ingredients:{
-                    ...state.ingredients,
-                    [action.ingName]:state.ingredients[action.ingName]+1
-                },
-                totalPrice:state.totalPrice+ingredient_price[action.ingName]
-             }
-        case actionTypes.REMOVE_INGREDIENT:
-            return {
-                ...state,
-                ingredients:{
-                    ...state.ingredients,
-                    [action.ingName]:state.ingredients[action.ingName]-1
-                },
-                totalPrice:state.totalPrice-ingredient_price[action.ingName]
-            }
-        case actionTypes.SET_INGREDIENTS:
-            return{
-                ...state,
-                ingredients:{
-                    salad:action.ingredients.salad,
-                    cheese:action.ingredients.cheese,
-                    bacon:action.ingredients.bacon,
-                    meat:action.ingredients.meat
-                },
-                error:false,
-            }
-        case actionTypes.FETCH_INGREDIENT_FAILED:
-            return{
-                ...state,
-                error:true
-            }
+        case actionTypes.PRICE_INIT:return updateObject(state,{totalPrice:action.price})    
+        case actionTypes.ADD_INGREDIENT:return addIngredient(state,action) ;  
+        case actionTypes.REMOVE_INGREDIENT: return removeIngredients(state,action)    
+        case actionTypes.SET_INGREDIENTS:return setIngredients(state,action)    
+        case actionTypes.FETCH_INGREDIENT_FAILED:return updateObject(state,{error:true})
+        default:return state;
 
      }
-     return state;
+     
 }
 
 export default reducer;

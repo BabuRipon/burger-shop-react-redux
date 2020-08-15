@@ -4,6 +4,7 @@ import Layout from './hoc/layouts/layouts';
 import Checkout from './container/checkout/checkout';
 import {Route,Switch}from 'react-router-dom'
 import Orders from './container/order/order';
+import Auth from './container/Auth/auth';
 
 
 class App extends Component{
@@ -15,6 +16,7 @@ class App extends Component{
               <Route path="/" exact component={BurgerBuilder} />
               <Route path="/checkout" component={Checkout}   />
               <Route path="/orders" component={Orders} />
+              <Route path="/auth" exact component={Auth} />
             </Switch>
           </Layout>
       </div>

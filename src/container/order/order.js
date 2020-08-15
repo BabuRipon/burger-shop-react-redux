@@ -2,43 +2,50 @@ import React ,{Component} from 'react';
 import Order from '../../component/order/order';
 import axios from '../../axios-order';
 import withError from '../../Ui/withErrorHandler/withErrorHandler';
+import * as actionCreator from '../../store/action/index';
+import {connect}from 'react-redux'
+import Spinner from '../../Ui/spinner/spinner';
 
 class Orders extends Component{
-    
-    state={
-        orders:[],
-        loading:true
-    }
 
     componentDidMount(){
-       axios.get('/orders.json')
-        .then(res=>{
-            const fetchOrder=[];
-            for(let key in res.data){
-                fetchOrder.push({
-                    ...res.data[key],
-                    id:key
-                })
-            }
-            this.setState({loading:false,orders:fetchOrder})
-        })
-        .catch(err=>{
-            this.setState({loading:false})
-        })
+       this.props.onFetchOrders(this.props.token);
     }
 
     render(){
+     
+        let orderSummary=<Spinner />
+        if(!this.props.loading){
+          orderSummary= this.props.orders.map(order=>(
+            <Order key={order.id} 
+            ingredients={order.ingredients}
+            price={order.price}
+            />
+          ))
+        }
+
         return(
           <div>
-              {this.state.orders.map(order=>(
-                  <Order key={order.id} 
-                  ingredients={order.ingredients}
-                  price={order.price}
-                  />
-              ))}
+              {
+                  orderSummary
+              }
           </div>
         )
     }
 }
 
-export default withError(Orders,axios);
+const mapStateToProps=(state)=>{
+    return{
+        orders:state.order.orders,
+        loading:state.order.loading,
+        token:state.auth.token
+    }
+}
+
+const mapDispatchToProps=(dispatch)=>{
+    return {
+        onFetchOrders:(token)=>dispatch(actionCreator.fetchOrdersFromServer(token))
+    }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(withError(Orders,axios));

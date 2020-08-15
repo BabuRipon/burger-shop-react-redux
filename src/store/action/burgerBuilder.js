@@ -1,7 +1,5 @@
 import * as actionType from './actionType';
 import axios from '../../axios-order';
-import Axios from 'axios';
-
 
 export const addIngredient=(name)=>{
     return{
@@ -49,7 +47,7 @@ export const initialPrice=()=>{
 
 export const initialIngredients=()=>{
     return dispatch=>{
-       axios.get('/%20ingredients.json')
+       axios.get('/ingredients.json')
          .then(res=>{
              console.log(res.data)
              dispatch(setIngredients(res.data))

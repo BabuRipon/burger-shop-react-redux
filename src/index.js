@@ -9,10 +9,12 @@ import {Provider} from 'react-redux';
 import thunk from 'redux-thunk';
 import burgerReducer from './store/reducer/burgerBuilder';
 import orderReducer from './store/reducer/order';
+import authReducer from './store/reducer/auth'
 
 const rootReducer=combineReducers({
   burgerBuilder:burgerReducer,
-  order:orderReducer
+  order:orderReducer,
+  auth:authReducer
 })
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

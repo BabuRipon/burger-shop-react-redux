@@ -123,7 +123,7 @@ class ContactData extends Component{
            customer:orderFormData,   
        }
    
-    this.props.onOrderBurger(orderData);
+    this.props.onOrderBurger(orderData,this.props.token);
     this.props.onPriceInit();
 
     }
@@ -197,6 +197,8 @@ class ContactData extends Component{
         <Button btnType="Success" disabled={!this.state.isFormValid}>ORDER</Button>
     </form>)
 
+    // console.log(this.props.loading)
+
       if(this.props.loading){
           form=<Spinner />
       }
@@ -213,13 +215,14 @@ const mapStateToProps=(state)=>{
     return{
         ing:state.burgerBuilder.ingredients,
         price:state.burgerBuilder.totalPrice,
-        loading:state.order.loading
+        loading:state.order.loading,
+        token:state.auth.token
     }
 }
 
 const mapDispatchToProps=(dispatch)=>{
     return{
-        onOrderBurger:(orderData)=>dispatch(actionCreator.purchaseBurger(orderData)),
+        onOrderBurger:(orderData,token)=>dispatch(actionCreator.purchaseBurger(orderData,token)),
         onPriceInit:()=>dispatch(actionCreator.initialPrice())
     }
 }

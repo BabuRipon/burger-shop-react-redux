@@ -19,6 +19,7 @@ class BurgerBuilder extends Component{
 
 componentDidMount(){
   this.props.onIngredientsInit();
+  this.props.onInittialPrice();
 }
 
  updatePurchasable(ingredient){
@@ -114,7 +115,8 @@ const mapDispatchToProps=(dispatch)=>{
         onAddIngredient:(name)=>dispatch(actionCreator.addIngredient(name)),
         onRemoveIngredient:(name)=>dispatch(actionCreator.removeIngredient(name)),
         onIngredientsInit:()=>dispatch(actionCreator.initialIngredients()),
-        onPurchaseInit:()=>dispatch(actionCreator.purchaseInit())
+        onPurchaseInit:()=>dispatch(actionCreator.purchaseInit()),
+        onInittialPrice:()=>dispatch(actionCreator.initialPrice())
     }
 }
 
